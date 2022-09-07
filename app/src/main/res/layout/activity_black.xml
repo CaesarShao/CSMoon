@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".BlackActivity">
+
+
+    <TextClock
+        android:id="@+id/time_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="yyyy / MM / dd"
+        android:format24Hour="yyyy / MM / dd"
+        android:textColor="#ffffff"
+        android:textSize="100sp"
+        tools:text="2月14日" />
+
+    <TextClock
+        android:id="@+id/time_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="hh:mm"
+        android:format24Hour="HH:mm"
+        android:textColor="#ffffff"
+        android:layout_marginTop="10dp"
+        android:textSize="120sp"
+        tools:text="13:30" />
+
+</LinearLayout>
