@@ -33,12 +33,13 @@ class ConfigService : Service() {
     }
 
 
-    var job: Job? = null
+    private var job: Job? = null
     private fun startTimeCount() {
+        LogCS.I("开始时间计算")
         cancleTimeCount()
         job = GlobalScope.launch(Dispatchers.IO) {
-            delay(40000)
-            if (isActive){
+            delay(1000)
+            if (isActive) {
                 checkTime()
             }
         }
@@ -49,20 +50,31 @@ class ConfigService : Service() {
         job = null
     }
 
-    private suspend fun checkTime() {
-//        LogCS.I("当前时间" + Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
-//        LogCS.I("当前时间" + Calendar.getInstance().get(Calendar.MINUTE))
-        if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23/*&&Calendar.getInstance().get(Calendar.MINUTE)>=30*/) {
-            GlobalScope.launch(Dispatchers.Main){
-                val intent = Intent(this@ConfigService, BlackActivity::class.java)
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                cancleTimeCount()
+    private  fun checkTime() {
+        if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) in 2..6) {
+            if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 22 && Calendar.getInstance().get(Calendar.MINUTE) >= 30)||Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23) {
+                goAct()
+            }else{
+                startTimeCount()
             }
-        }else{
-            startTimeCount()
+        } else {
+            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23){
+                goAct()
+            }else{
+                startTimeCount()
+            }
         }
     }
+
+    private fun goAct(){
+        GlobalScope.launch(Dispatchers.Main) {
+            val intent = Intent(this@ConfigService, BlackActivity::class.java)
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            cancleTimeCount()
+        }
+    }
+
 
     fun bindGuardService() {
         LogCS.I("绑定了守护进程")
