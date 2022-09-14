@@ -35,10 +35,9 @@ class ConfigService : Service() {
 
     private var job: Job? = null
     private fun startTimeCount() {
-        LogCS.I("开始时间计算")
         cancleTimeCount()
         job = GlobalScope.launch(Dispatchers.IO) {
-            delay(1000)
+            delay(30000)
             if (isActive) {
                 checkTime()
             }
@@ -52,7 +51,7 @@ class ConfigService : Service() {
 
     private  fun checkTime() {
         if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) in 2..6) {
-            if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 22 && Calendar.getInstance().get(Calendar.MINUTE) >= 30)||Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23) {
+            if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 22 && Calendar.getInstance().get(Calendar.MINUTE) >= 5)||Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23) {
                 goAct()
             }else{
                 startTimeCount()
@@ -73,6 +72,8 @@ class ConfigService : Service() {
             startActivity(intent)
             cancleTimeCount()
         }
+//        ScreenControl.getInstance().init(this).turnOff()
+//        cancleTimeCount()
     }
 
 

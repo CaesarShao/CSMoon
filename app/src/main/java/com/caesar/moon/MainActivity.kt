@@ -16,11 +16,12 @@ class MainActivity : AppCompatActivity() {
         startReceiver()
         lightConfig()
         startService()
+//        lighCheck()
     }
 
     private fun initView(){
         findViewById<Button>(R.id.button).setOnClickListener {
-            startService()
+//            lighOn()
         }
     }
 
@@ -72,6 +73,17 @@ class MainActivity : AppCompatActivity() {
         val lp = window.attributes
         lp.screenBrightness = 0f
         window.attributes = lp
+    }
 
+    fun lighCheck(){
+        val screenControl = ScreenControl.getInstance().init(this)
+        if (!screenControl.isAdminActive()) {
+            screenControl.openScreenPermission(this, "程序操作需要相应权限，请激活设备管理器");
+        }
+    }
+
+    fun lighOn(){
+        val screenControl = ScreenControl.getInstance().init(this)
+        screenControl.turnOff();
     }
 }
