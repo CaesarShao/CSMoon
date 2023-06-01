@@ -28,7 +28,12 @@ class ConfigService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         LogCS.I("服务1启动了")
-        startTimeCount()
+        val time = intent?.getIntExtra("time",-1)
+        if (time == 1){
+            startLongTimeCount()
+        }else{
+            startTimeCount()
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -43,6 +48,16 @@ class ConfigService : Service() {
             }
         }
     }
+    private fun startLongTimeCount() {
+        cancleTimeCount()
+        job = GlobalScope.launch(Dispatchers.IO) {
+            delay(1800000)
+            if (isActive) {
+                checkTime()
+            }
+        }
+    }
+
 
     private fun cancleTimeCount() {
         job?.cancel()
@@ -51,13 +66,13 @@ class ConfigService : Service() {
 
     private  fun checkTime() {
         if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) in 2..6) {
-            if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 22 && Calendar.getInstance().get(Calendar.MINUTE) >= 5)||Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23) {
+            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 22||Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <=6) {
                 goAct()
             }else{
                 startTimeCount()
             }
         } else {
-            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23){
+            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 23||Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 6){
                 goAct()
             }else{
                 startTimeCount()
