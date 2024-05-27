@@ -27,8 +27,8 @@ class ConfigService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        LogCS.I("服务1启动了")
         val time = intent?.getIntExtra("time",-1)
+        LogCS.I("服务1启动了:"+time)
         if (time == 1){
             startLongTimeCount()
         }else{
@@ -81,9 +81,12 @@ class ConfigService : Service() {
     }
 
     private fun goAct(){
+        LogCS.I("开始跳转了")
         GlobalScope.launch(Dispatchers.Main) {
             val intent = Intent(this@ConfigService, BlackActivity::class.java)
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+
             startActivity(intent)
             cancleTimeCount()
         }

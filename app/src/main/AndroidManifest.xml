@@ -7,6 +7,7 @@
         android:name="android.permission.REBOOT"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <!-- 亮屏的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -23,7 +24,8 @@
         android:theme="@style/Theme.CSMoon">
         <activity
             android:name=".BlackActivity"
-            android:exported="false" />
+            android:launchMode="singleTask"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -2,11 +2,16 @@ package com.caesar.moon
 
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.lang.reflect.Method
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,17 +22,39 @@ class MainActivity : AppCompatActivity() {
         lightConfig()
         startService()
 //        lighCheck()
+        initData()
+    }
+    private fun initData(){
+        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                !Settings.canDrawOverlays(this)
+            } else {
+                false
+            }
+        ){
+            val int1 = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            int1.setData(Uri.parse("package:"+packageName))
+            startActivityForResult(int1,0)
+        }
     }
 
     private fun initView(){
+        findViewById<TextView>(R.id.tvShow).text = Build.CPU_ABI+"/////"+Build.CPU_ABI2
         findViewById<Button>(R.id.button).setOnClickListener {
 //            lighOn()
+            val intent = Intent(this, BlackActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
     }
 
     fun startService(){
         val intent = Intent(this,ConfigService::class.java)
-        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+
+        }else {
+            startService(intent)
+        }
 
     }
 
